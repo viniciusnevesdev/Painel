@@ -11,3 +11,11 @@ body{background:var(--bg);color:var(--text)}header{padding-bottom:16px}main{padd
 .theme-option:hover{background:transparent}.theme-option.is-active{color:#1684ef}.theme-option svg{width:25px;height:25px;flex:none}.theme-option:focus-visible{outline:2px solid var(--blue);outline-offset:-4px}
 [data-theme=dark] .theme-picker__bubble{background:#203f63;border-color:#6aaef1;box-shadow:0 3px 14px #0008}[data-theme=dark] .theme-option{color:#a8adba}[data-theme=dark] .theme-option.is-active{color:#79baff}
 @media(max-width:420px){.theme-option{gap:5px;font-size:14px}.theme-option svg{width:22px;height:22px}}
+
+/* Ajustes como página própria, não como janela. */
+.settings-page{position:fixed;z-index:20;inset:0;overflow-y:auto;background:var(--bg);color:var(--text);padding:calc(max(20px,env(safe-area-inset-top))) 24px max(36px,env(safe-area-inset-bottom));-webkit-overflow-scrolling:touch}
+.settings-page__content{width:min(100%,720px);margin:0 auto}.settings-page__topbar{display:flex;align-items:center;gap:16px;min-height:50px;margin-bottom:12px}.settings-page__topbar h1{margin:0;font-size:28px;letter-spacing:-.7px}.settings-page .hint:first-of-type{margin-top:0}.settings-open{overflow:hidden}
+.glass-back{display:grid;place-items:center;flex:0 0 50px;width:50px;height:50px;min-height:50px;padding:0;border-radius:50%;color:var(--text);border:1px solid rgba(42,55,76,.12);background:rgba(255,255,255,.52);box-shadow:0 5px 16px rgba(31,45,68,.10),inset 0 1px 0 rgba(255,255,255,.72);backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%)}
+.glass-back:hover{background:rgba(255,255,255,.72)}.glass-back svg{display:block;width:13px;height:17px}.glass-back:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+[data-theme=dark] .glass-back{border-color:rgba(255,255,255,.10);background:rgba(255,255,255,.07);box-shadow:0 6px 17px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.07)}[data-theme=dark] .glass-back:hover{background:rgba(255,255,255,.12)}
+@media(max-width:450px){.settings-page{padding-left:16px;padding-right:16px}.settings-page__topbar h1{font-size:27px}}
