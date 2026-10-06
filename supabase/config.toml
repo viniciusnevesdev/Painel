@@ -1,0 +1,4 @@
+[functions.api]
+verify_jwt = false
+[functions.push]
+verify_jwt = false
