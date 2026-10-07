@@ -68,3 +68,8 @@ footer{display:none}
 .settings-card--group .settings-row__spacer{width:56px;flex-basis:56px}
 .settings-card--update{padding:20px 23px}
 @media(max-width:450px){header,main{padding-left:20px;padding-right:20px}}
+
+/* Ajuste fino dos cartões solicitados. */
+section,.agenda,.board{padding-top:18px}
+.agenda .sectionhead,.tasks .sectionhead,.board .sectionhead{padding-bottom:8px}
+@media(max-width:450px){section,.agenda,.board{padding-top:14px}}
