@@ -79,3 +79,7 @@ section,.agenda,.board{padding-top:18px}
 
 /* O controle de fechar é somente o ícone, sem cartão ao fundo. */
 .dialog-close{width:32px;height:32px;min-width:32px;min-height:32px;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;color:#172c46}.dialog-close:hover{background:transparent;opacity:.72}.dialog-close svg{width:24px;height:24px}[data-theme=dark] .dialog-close{background:transparent;border:0;color:#e9eef8}
+
+
+/* Ações de atualização e backup na base da tela inicial. */
+.home-utilities{display:grid;grid-template-columns:1fr;gap:9px;margin:2px 0 6px;padding:2px 0 10px}.home-utilities button{min-height:48px;border-radius:16px;background:var(--panel);border-color:var(--line);box-shadow:var(--shadow);font-size:14px;font-weight:650}.home-utilities #homeforceupdate{color:var(--green)}.home-utilities #homeimport{color:var(--blue)}
