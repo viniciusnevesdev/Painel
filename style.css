@@ -82,7 +82,11 @@ section,.agenda,.board{padding-top:18px}
 
 
 /* Ações de atualização e backup na base da tela inicial. */
-.home-utilities{display:grid;grid-template-columns:1fr;gap:9px;margin:2px 0 6px;padding:2px 0 10px}.home-utilities button{min-height:48px;border-radius:16px;background:var(--panel);border-color:var(--line);box-shadow:var(--shadow);font-size:14px;font-weight:650}.home-utilities #homeforceupdate{color:var(--green)}.home-utilities #homeimport{color:var(--blue)}
+.home-utilities{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:2px 0 6px;padding:2px 0 10px}
+.home-utilities button{min-height:48px;border-radius:16px;background:transparent;border-color:transparent;box-shadow:none;font-size:14px;font-weight:650}
+.home-utilities button:hover{background:var(--soft)}
+.home-utilities #homeforceupdate{grid-column:1 / -1;color:var(--green)}
+.home-utilities #homeimport{color:var(--blue)}
 
 
 /* Organização manual dos cartões da tela inicial. */
