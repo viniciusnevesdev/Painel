@@ -91,3 +91,13 @@ section,.agenda,.board{padding-top:18px}
 
 /* Organização manual dos cartões da tela inicial. */
 .heading-actions{display:flex;flex-direction:column;align-items:flex-end;gap:7px}.layout-edit-button{min-height:32px;padding:5px 11px;border-radius:999px;background:transparent;border-color:var(--line);color:var(--muted);font-size:12px;font-weight:650}.layout-edit-button.is-active{color:var(--blue);border-color:var(--blue)}.is-reordering{outline:2px dashed color-mix(in srgb,var(--blue) 45%,transparent);outline-offset:4px}.card-order-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 14px;padding:8px 10px;border-radius:12px;background:var(--soft);color:var(--muted);font-size:12px;font-weight:650}.card-order-controls>div{display:flex;gap:6px}.card-order-controls button{display:grid;place-items:center;min-width:34px;min-height:34px;padding:0;border-radius:10px;font-size:18px;line-height:1}.card-order-controls button:not(:disabled){color:var(--blue)}#layout-save-actions{display:flex;justify-content:center;margin:2px 0 16px}#layout-save-actions button{min-height:46px;padding:10px 20px;border-radius:999px;background:var(--blue);border-color:var(--blue);color:#fff;font-weight:750;box-shadow:var(--shadow)}
+
+/* Configuração visual dos três cartões principais — Painel Designer. */
+section,.agenda,.board{border:1px solid var(--line);border-radius:23px;padding:13px 20px 20px;box-shadow:0 8px 24px rgba(31,45,70,.04)}
+.agenda .sectionhead,.tasks .sectionhead,.board .sectionhead{align-items:center;gap:12px;padding-bottom:7px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+.agenda .sectionhead>div,.tasks .sectionhead>div,.board .sectionhead>div{display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0}
+.agenda .sectionhead h2,.tasks .sectionhead h2,.board .sectionhead h2{order:0;margin:0;font-size:29px;font-weight:700}
+.agenda .sectionhead small,.tasks .sectionhead small,.board .sectionhead small{order:1;margin:0;font-size:9px}
+.tasks .sectionhead small{color:#25866a}
+.agenda .sectionhead .icon-button,.tasks .sectionhead .icon-button,.board .sectionhead .icon-button{width:35px;height:35px;min-width:35px;min-height:35px;padding:0;border-radius:21%;transform:translate(0,0)}
+.agenda .sectionhead .icon-button svg,.tasks .sectionhead .icon-button svg,.board .sectionhead .icon-button svg{width:20px;height:20px}
