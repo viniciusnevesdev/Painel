@@ -57,3 +57,25 @@ function validateState(s){if(!s||!Array.isArray(s.tasks)||!Array.isArray(s.notes
 $('#import').onchange=async e=>{try{const file=e.target.files[0];if(!file)return;if(file.size>3000000)throw Error('Arquivo muito grande.');const d=JSON.parse(await file.text());if(d.format!=='painel-v1')throw Error('Formato inválido.');const s=validateState(d.state);if(confirm('Substituir os dados atuais por este backup?'))await change(()=>state=s)}catch(e){toast(e.message)}finally{e.target.value=''}};
 window.addEventListener('online',sync);document.addEventListener('visibilitychange',()=>{if(!document.hidden){render();sync()}});setInterval(()=>{if(!document.hidden){render();if(cfg.token)sync()}},60000);
 try{await dbReady;const saved=await read('state');if(saved){state=saved.state;revision=saved.revision;pending=saved.pending}const calendar=await read('calendar');if(calendar){events=calendar.events;accounts=calendar.accounts;calendarAt=calendar.at}render();if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>toast('Não foi possível preparar o modo offline.'));if(new URLSearchParams(location.search).has('google')){toast(new URLSearchParams(location.search).get('google')==='ok'?'Google Agenda conectado.':'Não foi possível conectar o Google.');history.replaceState(null,'',location.pathname)}sync()}catch(e){document.querySelector('main').innerHTML='<p>O armazenamento do dispositivo não está disponível. Abra o Painel fora da navegação privada e tente novamente.</p>'}
+
+/* Ícones das ações da tela inicial espelhados dos Ajustes */
+function syncHomeUtilityIcons(){
+  const pairs = [
+    ['#homeforceupdate', document.querySelector('#forceupdate svg')],
+    ['#homeexport', document.querySelector('#export .settings-icon svg')],
+    ['#homeimport', document.querySelector('#import')?.closest('.settings-row--label')?.querySelector('.settings-icon svg')]
+  ];
+
+  for (const [targetSelector, source] of pairs) {
+    const target = document.querySelector(targetSelector);
+    if (!target || !source) continue;
+
+    target.querySelector('.home-utility-icon')?.remove();
+
+    const icon = source.cloneNode(true);
+    icon.classList.add('home-utility-icon');
+    target.prepend(icon);
+  }
+}
+
+syncHomeUtilityIcons();

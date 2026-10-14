@@ -101,3 +101,557 @@ section,.agenda,.board{border:1px solid var(--line);border-radius:23px;padding:1
 .tasks .sectionhead small{color:#25866a}
 .agenda .sectionhead .icon-button,.tasks .sectionhead .icon-button,.board .sectionhead .icon-button{width:35px;height:35px;min-width:35px;min-height:35px;padding:0;border-radius:21%;transform:translate(0,0)}
 .agenda .sectionhead .icon-button svg,.tasks .sectionhead .icon-button svg,.board .sectionhead .icon-button svg{width:20px;height:20px}
+
+#newtask,
+#newnote {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex: 0 0 44px;
+}
+
+
+#refresh {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex: 0 0 44px;
+}
+
+
+#status {
+  display: none !important;
+}
+
+
+/* Tema: mostrar somente o seletor */
+.settings-card--theme {
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  overflow: visible !important;
+}
+
+.settings-card--theme .settings-row__intro {
+  display: none !important;
+}
+
+.settings-card--theme .theme-picker {
+  margin: 0 !important;
+  border-radius: 999px !important;
+}
+
+.settings-card--theme .theme-picker__bubble {
+  border-radius: 999px !important;
+}
+
+
+/* Centralizar título Aparência */
+.settings-section-title {
+  text-align: center;
+}
+
+
+/* Bolha do seletor de aparência */
+.theme-picker__bubble {
+  border-width: 1px !important;
+  transition:
+    transform 0.38s cubic-bezier(.2,.8,.2,1),
+    background 0.3s,
+    border-color 0.3s !important;
+}
+
+
+/* Efeito de vidro na bolha seletora */
+.theme-picker__bubble {
+  border-radius: 999px !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.85),
+    0 3px 12px rgba(56,121,178,.18) !important;
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+}
+
+[data-theme="dark"] .theme-picker__bubble {
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.28),
+    0 3px 14px rgba(0,0,0,.30) !important;
+}
+
+
+#forceupdate.update-now {
+  border-radius: 999px !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.85),
+    0 7px 16px rgba(68,78,113,.09) !important;
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+}
+[data-theme="dark"] #forceupdate.update-now {
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.25),
+    0 7px 16px rgba(0,0,0,.18) !important;
+}
+
+/* Ícones do seletor de aparência 30% menores */
+.theme-picker .theme-option svg {
+  width: 17.5px !important;
+  height: 17.5px !important;
+}
+
+@media (max-width:420px) {
+  .theme-picker .theme-option svg {
+    width: 15.4px !important;
+    height: 15.4px !important;
+  }
+}
+
+
+/* Barra de aparência 10% mais baixa */
+.theme-picker {
+  min-height: 57.6px !important;
+  padding-top: 3.6px !important;
+  padding-bottom: 3.6px !important;
+}
+
+.theme-picker__bubble {
+  top: 3.6px !important;
+  bottom: 3.6px !important;
+}
+
+.theme-option {
+  min-height: 48.6px !important;
+}
+
+
+/* Corrige a altura do seletor de aparência */
+.theme-picker {
+  height: 58px !important;
+  min-height: 58px !important;
+  padding: 4px !important;
+}
+
+.theme-picker .theme-option {
+  height: 100% !important;
+  min-height: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.theme-picker__bubble {
+  top: 4px !important;
+  bottom: 4px !important;
+}
+
+
+/* Seletor de aparência mais fino */
+.theme-picker {
+  height: 41px !important;
+  min-height: 41px !important;
+  padding: 3px !important;
+}
+
+.theme-picker .theme-option {
+  height: 100% !important;
+  min-height: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.theme-picker__bubble {
+  top: 3px !important;
+  bottom: 3px !important;
+}
+
+
+/* Organização do cartão Atualizar aplicativo */
+.settings-update-title {
+  text-align: center !important;
+  color: var(--settings-text, var(--text)) !important;
+  margin-bottom: 14px !important;
+}
+
+.settings-card--update {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 16px !important;
+  padding: 22px 20px !important;
+}
+
+.settings-card--update .update-now {
+  order: 1 !important;
+  width: auto !important;
+  align-self: center !important;
+}
+
+.settings-card--update .settings-row__intro {
+  order: 2 !important;
+  display: block !important;
+  width: 100% !important;
+  text-align: center !important;
+}
+
+.settings-card--update .settings-row__intro .settings-icon,
+.settings-card--update .settings-row__intro h3 {
+  display: none !important;
+}
+
+.settings-card--update .settings-row__intro p {
+  margin: 0 !important;
+  text-align: center !important;
+}
+
+
+/* Cartão Atualizar aplicativo — estrutura final */
+.settings-card--update {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 14px 18px !important;
+}
+
+.settings-card--update .update-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.settings-card--update .update-now {
+  width: auto !important;
+  align-self: center !important;
+  margin: 0 !important;
+}
+
+.settings-card--update .update-description {
+  width: 100%;
+  margin: 0 !important;
+  text-align: center;
+  color: var(--settings-secondary);
+  font-size: 11.5px;
+  line-height: 1.35;
+}
+
+
+/* Corrige a ordem dentro do cartão de atualização */
+.settings-card--update .update-content .update-now {
+  order: 0 !important;
+}
+
+.settings-card--update .update-content .update-description {
+  order: 1 !important;
+}
+
+
+/* ===== Exportar / Importar — lista compacta ===== */
+
+/* Cartão que contém Exportar e Importar */
+.settings-card--group:has(#export) {
+  overflow: hidden !important;
+}
+
+/* Duas linhas mais baixas e compactas */
+#export,
+.settings-row--label:has(#import) {
+  display: grid !important;
+  grid-template-columns: 48px minmax(0, 1fr) !important;
+  align-items: center !important;
+
+  min-height: 68px !important;
+  padding: 10px 14px !important;
+  margin: 0 !important;
+
+  column-gap: 9px !important;
+}
+
+/* Ícones maiores */
+#export .settings-icon,
+.settings-row--label:has(#import) .settings-icon {
+  width: 48px !important;
+  height: 48px !important;
+  flex: 0 0 48px !important;
+  margin: 0 !important;
+}
+
+#export .settings-icon svg,
+.settings-row--label:has(#import) .settings-icon svg {
+  width: 40px !important;
+  height: 40px !important;
+}
+
+/* Texto mais próximo do ícone */
+#export .settings-row__body,
+.settings-row--label:has(#import) .settings-row__body {
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  align-self: center !important;
+}
+
+/* Títulos */
+#export .settings-row__body strong,
+.settings-row--label:has(#import) .settings-row__body strong {
+  display: block !important;
+  margin: 0 !important;
+
+  font-size: 18px !important;
+  line-height: 1.12 !important;
+  font-weight: 750 !important;
+  letter-spacing: -0.2px !important;
+}
+
+/* Descrições */
+#export .settings-row__body small,
+.settings-row--label:has(#import) .settings-row__body small {
+  display: block !important;
+  margin: 2px 0 0 !important;
+
+  font-size: 13.5px !important;
+  line-height: 1.18 !important;
+  font-weight: 400 !important;
+
+  letter-spacing: 0 !important;
+  word-spacing: 0 !important;
+
+  max-width: none !important;
+}
+
+/* Remove os > da direita */
+#export .settings-chevron,
+.settings-row--label:has(#import) .settings-chevron {
+  display: none !important;
+}
+
+/* Remove o divisor antigo que atravessava o cartão */
+.settings-row--label:has(#import) {
+  border-top: 0 !important;
+  position: relative !important;
+}
+
+/* Novo divisor: começa alinhado com o texto */
+.settings-row--label:has(#import)::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 71px;
+  right: 14px;
+  height: 1px;
+  background: var(--settings-separator, rgba(120,121,132,.18));
+}
+
+/* Evita margens de label aumentando a linha */
+.settings-card--group:has(#export) label.settings-row {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Mantém o input de importar invisível sem afetar layout */
+.settings-row--label:has(#import) #import {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+
+/* Importar e Exportar — ícones 15% menores */
+#export .settings-icon svg,
+.settings-row--label:has(#import) .settings-icon svg {
+  width: 34px !important;
+  height: 34px !important;
+}
+
+
+/* Ícones das ações inferiores da tela inicial */
+.home-utilities button {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+}
+
+.home-utilities .home-utility-icon {
+  display: block;
+  width: 24px !important;
+  height: 24px !important;
+  flex: 0 0 24px;
+}
+
+#homeforceupdate .home-utility-icon {
+  color: #50cf78;
+}
+
+#homeexport .home-utility-icon,
+#homeimport .home-utility-icon {
+  color: #8671db;
+}
+
+
+/* ===== Ações inferiores — layout final ===== */
+
+.home-utilities {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 14px !important;
+
+  padding: 0 !important;
+  margin: 8px 0 10px !important;
+
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Buscar atualização separado */
+.home-utilities #homeforceupdate {
+  align-self: center !important;
+  width: auto !important;
+  min-width: 58% !important;
+  min-height: 54px !important;
+
+  padding: 9px 22px !important;
+  margin: 0 !important;
+
+  border: 1px solid var(--line) !important;
+  border-radius: 999px !important;
+  background: var(--panel) !important;
+  box-shadow: var(--shadow) !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 9px !important;
+
+  font-size: 17px !important;
+  font-weight: 750 !important;
+}
+
+/* Card apenas de Exportar + Importar */
+.home-backup-group {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  padding: 14px 10px;
+  gap: 4px;
+
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+/* As duas ações */
+.home-backup-group button {
+  min-width: 0 !important;
+  min-height: 72px !important;
+
+  padding: 8px 10px !important;
+  margin: 0 !important;
+
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+
+  font-size: 18px !important;
+  font-weight: 750 !important;
+  white-space: nowrap !important;
+}
+
+/* Ícones */
+.home-backup-group .home-utility-icon {
+  width: 36px !important;
+  height: 36px !important;
+  flex: 0 0 36px !important;
+}
+
+#homeforceupdate .home-utility-icon {
+  width: 27px !important;
+  height: 27px !important;
+  flex: 0 0 27px !important;
+}
+
+
+/* Área inferior — 50% mais baixa */
+.home-utilities {
+  gap: 7px !important;
+  margin-top: 4px !important;
+  margin-bottom: 5px !important;
+}
+
+/* Buscar atualização */
+.home-utilities #homeforceupdate {
+  min-height: 27px !important;
+  height: 27px !important;
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
+}
+
+/* Cartão Exportar / Importar */
+.home-backup-group {
+  padding-top: 7px !important;
+  padding-bottom: 7px !important;
+}
+
+/* Exportar e Importar */
+.home-backup-group button {
+  min-height: 36px !important;
+  height: 36px !important;
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+}
+
+
+/* Ajuste fino da área inferior */
+
+/* Buscar atualização 15% mais alto */
+.home-utilities #homeforceupdate {
+  height: 31px !important;
+  min-height: 31px !important;
+}
+
+/* Ícones de Exportar e Importar 15% menores */
+.home-backup-group .home-utility-icon {
+  width: 31px !important;
+  height: 31px !important;
+  flex: 0 0 31px !important;
+}
+
+
+/* Ajuste fino final */
+
+/* Buscar atualização 10% mais alto */
+.home-utilities #homeforceupdate {
+  height: 34px !important;
+  min-height: 34px !important;
+}
+
+/* Ícones de Exportar e Importar 15% menores */
+.home-backup-group .home-utility-icon {
+  width: 26px !important;
+  height: 26px !important;
+  flex: 0 0 26px !important;
+}
