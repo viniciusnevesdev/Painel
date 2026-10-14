@@ -36,10 +36,72 @@ function noteHTML(n,other=false){return `<article class="note ${n.highlight?'hig
 function renderCollection(){const items=state.notes.filter(n=>collectionMode==='trash'?!!n.deletedAt:!n.deletedAt&&!noteVisible(n));$('#collectiontitle').textContent=collectionMode==='trash'?'Lixeira':'Outras informações';$('#collectionitems').innerHTML=items.length?items.map(n=>collectionMode==='trash'?`<article class="note"><h3>${esc(n.title)}${n.demo?'<span class="demo-tag">Fictício</span>':''}</h3><div class="actions"><button data-restore="${esc(n.id)}">Restaurar</button><button data-delete="${esc(n.id)}">Excluir definitivamente</button></div></article>`:noteHTML(n,true)).join(''):'<p class="empty">Nada aqui.</p>'}
 function localDate(iso){return iso?`${parts(new Date(iso)).date}T${parts(new Date(iso)).time}`:''}
 function isoDate(s){return s?new Date(s+':00-03:00').toISOString():null}
-function formVisibility(){const f=$('#form');$('#range').hidden=f.preset.value!=='custom';$('#weekdays').hidden=f.repeat.value!=='weekly'}
-function openEditor(kind,id){const f=$('#form');f.reset();$('#formerror').textContent='';f.elements.kind.value=kind;f.elements.id.value=id||'';$('#formtitle').textContent=kind==='task'?'Pendência':'Informação do Mural';$('#taskfields').hidden=kind!=='task';$('#notefields').hidden=kind!=='note';f.listId.innerHTML=state.lists.map(l=>`<option value="${esc(l.id)}">${esc(l.title)}</option>`).join('');const x=(kind==='task'?state.tasks:state.notes).find(x=>x.id===id);if(x){for(const key of ['title','description','dueDate','dueTime','listId','repeat'])if(f.elements[key])f.elements[key].value=x[key]||'';f.highlight.checked=!!x.highlight;f.preset.value=x.starts||x.ends?'custom':'permanent';f.starts.value=localDate(x.starts);f.ends.value=localDate(x.ends);f.times.value=(x.times||[]).join(', ');f.before.value=(x.before||[]).join(', ');f.querySelectorAll('[name=day]').forEach(c=>c.checked=(x.days||[]).includes(Number(c.value)))}$('#deletetask').hidden=kind!=='task'||!id;formVisibility();$('#editor').showModal()}
+function syncTimeValue(){
+ const hidden=$('#timesValue'),list=$('#timeList');
+ if(!hidden||!list)return;
+ hidden.value=[...new Set([...list.querySelectorAll('input[type="time"]')].map(x=>x.value).filter(Boolean))].sort().join(', ');
+}
+
+function addTimeRow(value=''){
+ const list=$('#timeList');
+ if(!list)return null;
+
+ const inputs=[...list.querySelectorAll('input[type="time"]')];
+
+ if(value){
+   const existing=inputs.find(x=>x.value===value);
+   if(existing)return existing;
+ }else{
+   const empty=inputs.find(x=>!x.value);
+   if(empty)return empty;
+ }
+
+ const row=document.createElement('div');
+ row.className='time-row';
+ row.innerHTML='<input type="time" aria-label="Horário de aviso"><button type="button" class="time-remove" aria-label="Remover horário">×</button>';
+
+ const input=row.querySelector('input');
+ input.value=value;
+ input.onchange=syncTimeValue;
+
+ row.querySelector('.time-remove').onclick=()=>{
+   row.remove();
+   syncTimeValue();
+ };
+
+ list.append(row);
+ syncTimeValue();
+ return input;
+}
+
+function renderTimeRows(values=[]){
+ const list=$('#timeList');
+ if(!list)return;
+ list.innerHTML='';
+ values.forEach(addTimeRow);
+ syncTimeValue();
+}
+
+function bindTimeEditor(){
+ $('#addTime').onclick=()=>{
+   const input=addTimeRow('');
+   requestAnimationFrame(()=>{
+     input?.focus();
+     try{input?.showPicker()}catch{}
+   });
+ };
+
+ document.querySelectorAll('[data-time-preset]').forEach(button=>{
+   button.onclick=()=>addTimeRow(button.dataset.timePreset);
+ });
+}
+
+bindTimeEditor();
+
+function formVisibility(){const f=$('#form');$('#range').hidden=f.preset.value!=='custom';$('#weekdays').hidden=f.repeat.value!=='weekly';$('#monthday').hidden=f.repeat.value!=='monthly'}
+function openEditor(kind,id){const f=$('#form');f.reset();renderTimeRows([]);$('#formerror').textContent='';f.elements.kind.value=kind;f.elements.id.value=id||'';$('#formtitle').textContent=kind==='task'?'Pendência':'Informação do Mural';$('#taskfields').hidden=kind!=='task';$('#notefields').hidden=kind!=='note';f.listId.innerHTML=state.lists.map(l=>`<option value="${esc(l.id)}">${esc(l.title)}</option>`).join('');const x=(kind==='task'?state.tasks:state.notes).find(x=>x.id===id);if(x){for(const key of ['title','description','dueDate','dueTime','listId','repeat'])if(f.elements[key])f.elements[key].value=x[key]||'';f.highlight.checked=!!x.highlight;if(f.elements.monthDay)f.elements.monthDay.value=x.monthDay||new Date().getDate();f.preset.value=x.starts||x.ends?'custom':'permanent';f.starts.value=localDate(x.starts);f.ends.value=localDate(x.ends);renderTimeRows(x.times||[]);f.before.value=(x.before||[]).join(', ');f.querySelectorAll('[name=day]').forEach(c=>c.checked=(x.days||[]).includes(Number(c.value)))}$('#deletetask').hidden=kind!=='task'||!id;formVisibility();$('#editor').showModal()}
 $('#weekdays').innerHTML=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].map((d,i)=>`<label><input type="checkbox" name="day" value="${i}"><span>${d}</span></label>`).join('');
-$('#form').addEventListener('change',formVisibility);$('#form').addEventListener('submit',async e=>{e.preventDefault();const f=e.target;try{const kind=f.elements.kind.value,id=f.elements.id.value||crypto.randomUUID(),old=(kind==='task'?state.tasks:state.notes).find(x=>x.id===id);const item={...old,id,title:f.elements.title.value.trim(),description:f.description.value.trim(),updatedAt:new Date().toISOString()};if(!item.title)throw Error('Preencha o título.');if(kind==='task'){item.listId=f.listId.value;item.dueDate=f.dueDate.value||null;item.dueTime=f.dueTime.value||null;item.before=parseBefore(f.before.value);if(item.dueTime&&!item.dueDate)throw Error('Um horário de prazo precisa de uma data.');if(item.before.length&&(!item.dueDate||!item.dueTime))throw Error('Avisos prévios precisam de prazo com data e horário.')}else{item.highlight=f.highlight.checked;item.repeat=f.repeat.value;item.days=[...f.querySelectorAll('[name=day]:checked')].map(x=>Number(x.value));item.times=parseTimes(f.times.value);if(item.repeat==='weekly'&&!item.days.length)throw Error('Escolha pelo menos um dia da semana.');const preset=f.preset.value;item.starts=null;item.ends=null;if(preset==='custom'){item.starts=isoDate(f.starts.value);item.ends=isoDate(f.ends.value)}else if(preset!=='permanent'){item.starts=new Date(`${dayKey()}T00:00:00-03:00`).toISOString();const d=new Date(nextMidnight());if(preset==='tomorrow')d.setUTCDate(d.getUTCDate()+1);if(preset==='week')d.setUTCDate(d.getUTCDate()+((7-parts().weekday)%7));item.ends=d.toISOString()}if(item.starts&&item.ends&&item.starts>=item.ends)throw Error('O fim deve ser posterior ao início.');item.zone='America/Sao_Paulo'}await change(()=>{const a=kind==='task'?state.tasks:state.notes;const i=a.findIndex(x=>x.id===id);if(i<0)a.push(item);else a[i]=item});$('#editor').close()}catch(e){$('#formerror').textContent=e.message}});
+$('#form').addEventListener('change',formVisibility);$('#form').addEventListener('submit',async e=>{e.preventDefault();const f=e.target;try{const kind=f.elements.kind.value,id=f.elements.id.value||crypto.randomUUID(),old=(kind==='task'?state.tasks:state.notes).find(x=>x.id===id);const item={...old,id,title:f.elements.title.value.trim(),description:f.description.value.trim(),updatedAt:new Date().toISOString()};if(!item.title)throw Error('Preencha o título.');if(kind==='task'){item.listId=f.listId.value;item.dueDate=f.dueDate.value||null;item.dueTime=f.dueTime.value||null;item.before=parseBefore(f.before.value);if(item.dueTime&&!item.dueDate)throw Error('Um horário de prazo precisa de uma data.');if(item.before.length&&(!item.dueDate||!item.dueTime))throw Error('Avisos prévios precisam de prazo com data e horário.')}else{item.highlight=f.highlight.checked;item.repeat=f.repeat.value;item.days=[...f.querySelectorAll('[name=day]:checked')].map(x=>Number(x.value));item.times=parseTimes(f.times.value);item.monthDay=item.repeat==='monthly'?Number(f.monthDay.value):null;if(item.repeat==='monthly'&&(!Number.isInteger(item.monthDay)||item.monthDay<1||item.monthDay>31))throw Error('Escolha um dia do mês entre 1 e 31.');if(item.repeat==='weekly'&&!item.days.length)throw Error('Escolha pelo menos um dia da semana.');const preset=f.preset.value;item.starts=null;item.ends=null;if(preset==='custom'){item.starts=isoDate(f.starts.value);item.ends=isoDate(f.ends.value)}else if(preset!=='permanent'){item.starts=new Date(`${dayKey()}T00:00:00-03:00`).toISOString();const d=new Date(nextMidnight());if(preset==='tomorrow')d.setUTCDate(d.getUTCDate()+1);if(preset==='week')d.setUTCDate(d.getUTCDate()+((7-parts().weekday)%7));item.ends=d.toISOString()}if(item.starts&&item.ends&&item.starts>=item.ends)throw Error('O fim deve ser posterior ao início.');item.zone='America/Sao_Paulo'}await change(()=>{const a=kind==='task'?state.tasks:state.notes;const i=a.findIndex(x=>x.id===id);if(i<0)a.push(item);else a[i]=item});$('#editor').close()}catch(e){$('#formerror').textContent=e.message}});
 document.addEventListener('click',async e=>{const b=e.target.closest('button');if(!b)return;if(b.hasAttribute('data-close')){b.closest('dialog').close();collectionMode='';return}const a=b.dataset;if(a.editTask){openEditor('task',a.editTask);return}if(a.editNote){openEditor('note',a.editNote);return}if(a.task){await change(()=>{const t=state.tasks.find(t=>t.id===a.task);t.completedAt=t.completedAt?null:new Date().toISOString()});return}const id=a.hide||a.later||a.remove||a.restore||a.delete||a.show;if(!id)return;const n=state.notes.find(n=>n.id===id);if(a.delete&&!confirm('Excluir definitivamente esta informação?'))return;if(a.later){const minutes=prompt('Aparecer novamente em quantos minutos?','60');if(minutes===null)return;const m=Number(minutes);if(!Number.isFinite(m)||m<=0){toast('Informe minutos maiores que zero.');return}const time=new Date(Date.now()+m*60000).toISOString();if(n.ends&&time>=n.ends){toast('Esse horário está fora da validade. Edite a validade primeiro.');return}await change(()=>{n.hiddenUntil=time;n.resurfaceAt=time});return}if(a.show&&!noteValid(n)){toast('Edite a validade ou recorrência para mostrar agora.');return}await change(()=>{if(a.hide){n.hiddenUntil=nextMidnight();n.resurfaceAt=null}if(a.remove){n.deletedAt=new Date().toISOString();n.resurfaceAt=null}if(a.restore)n.deletedAt=null;if(a.delete)state.notes=state.notes.filter(x=>x.id!==id);if(a.show){n.hiddenUntil=null;n.resurfaceAt=null}})});
 $('#deletetask').onclick=async()=>{const id=$('#form').elements.id.value;if(confirm('Descartar esta pendência?')){await change(()=>{const t=state.tasks.find(t=>t.id===id);if(t)t.deletedAt=new Date().toISOString()});$('#editor').close()}};
 $('#editlayout').onclick=startOrCancelLayout;$('#newtask').onclick=()=>openEditor('task');$('#newnote').onclick=()=>openEditor('note');$('#completed').onclick=()=>{showDone=!showDone;render()};$('#listfilter').onchange=render;$('#newlist').onclick=async()=>{const title=prompt('Nome da nova lista');if(title?.trim())await change(()=>state.lists.push({id:crypto.randomUUID(),title:title.trim()}))};$('#trash').onclick=()=>{collectionMode='trash';renderCollection();$('#collection').showModal()};$('#hidden').onclick=()=>{collectionMode='other';renderCollection();$('#collection').showModal()};$('#refresh').onclick=()=>{if(!cfg.token){toast('Configure a conexão em Ajustes.');return}sync()};$('#upcoming').onclick=()=>{showUpcoming=!showUpcoming;render()};
